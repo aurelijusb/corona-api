@@ -15,6 +15,7 @@ func init() {
 	mux.Get("/api/v1/raw/{file}", rawData)
 	mux.Get("/api/v1/raw", rawList)
 	mux.Get("/api/v1/dates", dates)
+	mux.Get("/api/v1/stats", stats)
 }
 
 func main() {
@@ -53,7 +54,6 @@ func rawData(w http.ResponseWriter, req *http.Request) {
 	app.RespondHTML(data, w)
 }
 
-
 func dates(w http.ResponseWriter, req *http.Request) {
 	files, err := app.GetFiles(app.GetEnv("DATA_PATH", "data/"))
 	if err != nil {
@@ -65,4 +65,25 @@ func dates(w http.ResponseWriter, req *http.Request) {
 		times = append(times, app.FileNameToDate(fileName))
 	}
 	app.RespondJSON(times, w)
+}
+
+func stats(w http.ResponseWriter, req *http.Request) {
+	dataPath := app.GetEnv("DATA_PATH", "data/")
+	files, err := app.GetFiles(dataPath)
+	if err != nil {
+		app.RespondWithError(err, w, req)
+		return
+	}
+	statistics := []app.CoronaReport{}
+	for _, fileName := range files {
+		content, err := app.ReadFile(dataPath, fileName)
+		if err != nil {
+			app.RespondWithError(err, w, req)
+			return
+		}
+		statistic := app.ExtractData(string(content), fileName)
+		statistics = append(statistics, statistic)
+	}
+
+	app.RespondJSON(statistics, w)
 }
