@@ -14,6 +14,12 @@ SERVER_HOST=127.0.0.1 SERVER_PORT=8080 go run cmd/api/main.go
 
 In the browser open [127.0.0.1:8080/ping](http://127.0.0.1:8080/ping)
 
+# Running tests
+
+```bash
+go test ./...
+```
+
 # Creating distributable
 
 ```bash

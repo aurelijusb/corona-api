@@ -1,4 +1,4 @@
-// Helpers for HTTP server
+// Package app consists of helpers for HTTP server
 package app
 
 import (

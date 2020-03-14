@@ -14,6 +14,7 @@ func init() {
 	mux.Get("/ping", ping)
 	mux.Get("/api/v1/raw/{file}", rawData)
 	mux.Get("/api/v1/raw", rawList)
+	mux.Get("/api/v1/dates", dates)
 }
 
 func main() {
@@ -50,4 +51,18 @@ func rawData(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	app.RespondHTML(data, w)
+}
+
+
+func dates(w http.ResponseWriter, req *http.Request) {
+	files, err := app.GetFiles(app.GetEnv("DATA_PATH", "data/"))
+	if err != nil {
+		app.RespondWithError(err, w, req)
+		return
+	}
+	var times []string
+	for _, fileName := range files {
+		times = append(times, app.FileNameToDate(fileName))
+	}
+	app.RespondJSON(times, w)
 }
