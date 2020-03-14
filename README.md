@@ -1,8 +1,8 @@
 Coronavirus as API
 ==================
 
-Showing oficial data of Coronavirus in Lithuania as API.
-So others could analyze data easier and do not DDOS oficial website.
+Showing official data of Coronavirus in Lithuania as API.
+So others could analyze data easier and do not DDOS official website.
 
 # Developing project locally
 
