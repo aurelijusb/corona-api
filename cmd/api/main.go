@@ -3,26 +3,51 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"os"
+
+	"github.com/aurelijusb/corona-api/internal/app"
+	"github.com/gorilla/pat"
 )
 
+var mux *pat.Router = pat.New()
+
+func init() {
+	mux.Get("/ping", ping)
+	mux.Get("/api/v1/raw/{file}", rawData)
+	mux.Get("/api/v1/raw", rawList)
+}
+
 func main() {
-	host := getEnv("SERVER_HOST", "0.0.0.0")
-	port := getEnv("SERVER_PORT", "80")
+	host := app.GetEnv("SERVER_HOST", "0.0.0.0")
+	port := app.GetEnv("SERVER_PORT", "80")
 
 	fmt.Printf("Listening on %s:%s\n", host, port)
 	http.HandleFunc("/ping", ping)
-	http.ListenAndServe(fmt.Sprintf("%s:%s", host, port), nil)
+	http.HandleFunc("/raw", rawList)
+	err := http.ListenAndServe(fmt.Sprintf("%s:%s", host, port), mux)
+	if err != nil {
+		fmt.Printf("Error: %s", err.Error())
+	}
 }
 
 func ping(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "pong\n")
 }
 
-func getEnv(key string, defaultValue string) string {
-	value := os.Getenv(key)
-	if value == "" {
-		return defaultValue
+func rawList(w http.ResponseWriter, req *http.Request) {
+	files, err := app.GetFiles(app.GetEnv("DATA_PATH", "data/"))
+	if err != nil {
+		app.RespondWithError(err, w, req)
+		return
 	}
-	return value
+	app.RespondJSON(files, w)
+}
+
+func rawData(w http.ResponseWriter, req *http.Request) {
+	fileID := req.URL.Query().Get(":file")
+	data, err := app.ReadFile(app.GetEnv("DATA_PATH", "data/"), fileID)
+	if err != nil {
+		app.RespondWithError(err, w, req)
+		return
+	}
+	app.RespondHTML(data, w)
 }

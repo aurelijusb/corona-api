@@ -33,7 +33,7 @@ docker build . --no-cache -t aurelijusb/corona-api:local
 Running container locally
 
 ```bash
-docker run -p 127.0.0.1:8080:80 aurelijusb/corona-api:local
+docker run -p 127.0.0.1:8080:80 -v $PWD/data:/data:ro aurelijusb/corona-api:local
 ```
 
 In the browser open [127.0.0.1:8080/ping](http://127.0.0.1:8080/ping)
