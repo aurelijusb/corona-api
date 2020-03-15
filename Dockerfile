@@ -1,4 +1,4 @@
-FROM golang:1.14 AS builder
+FROM golang:1.14.0-alpine3.11 AS builder
 WORKDIR /go/src/github.com/aurelijusb/corona-api
 COPY cmd cmd
 COPY internal internal
