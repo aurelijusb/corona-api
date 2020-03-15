@@ -41,8 +41,8 @@ func DateToFileName(date string) string {
 }
 
 // ExtractData - parse HTML into structured data
-func ExtractData(raw string, fileName string) CoronaReport {
-	if cached, exits := parsingCache[fileName]; exits {
+func ExtractData(raw string, fileName string, useCache bool) CoronaReport {
+	if cached, exits := parsingCache[fileName]; exits && useCache {
 		return cached
 	}
 

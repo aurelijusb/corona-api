@@ -101,7 +101,7 @@ func historical(w http.ResponseWriter, req *http.Request) {
 			app.RespondWithError(err, w, req)
 			return
 		}
-		statistic := app.ExtractData(string(content), fileName)
+		statistic := app.ExtractData(string(content), fileName, true)
 		statistics = append(statistics, statistic)
 	}
 
@@ -121,7 +121,7 @@ func latest(w http.ResponseWriter, req *http.Request) {
 		app.RespondWithError(err, w, req)
 		return
 	}
-	statistic := app.ExtractData(string(content), fileName)
+	statistic := app.ExtractData(string(content), fileName, true)
 
 	app.RespondJSON(statistic, w)
 }

@@ -19,7 +19,7 @@ var _ = Describe("Api", func() {
 	)
 	DescribeTable("should extract ConfirmedCases",
 		func(raw string, value string) {
-			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html")
+			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html", false)
 			expected, err := strconv.Atoi(value)
 			Expect(err).To(Not(HaveOccurred()))
 			Expect(structured.ConfirmedCases).To(Equal(expected))
@@ -30,7 +30,7 @@ var _ = Describe("Api", func() {
 	)
 	DescribeTable("should extract LastDayChecked",
 		func(raw string, value string) {
-			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html")
+			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html", false)
 			expected, err := strconv.Atoi(value)
 			Expect(err).To(Not(HaveOccurred()))
 			Expect(structured.LastDayChecked).To(Equal(expected))
@@ -40,7 +40,7 @@ var _ = Describe("Api", func() {
 	)
 	DescribeTable("should extract TotalTests",
 		func(raw string, value string) {
-			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html")
+			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html", false)
 			expected, err := strconv.Atoi(value)
 			Expect(err).To(Not(HaveOccurred()))
 			Expect(structured.TotalTests).To(Equal(expected))
@@ -50,7 +50,7 @@ var _ = Describe("Api", func() {
 	)
 	DescribeTable("should extract KnownCandidates",
 		func(raw string, value string) {
-			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html")
+			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html", false)
 			expected, err := strconv.Atoi(value)
 			Expect(err).To(Not(HaveOccurred()))
 			Expect(structured.KnownCandidates).To(Equal(expected))
@@ -61,7 +61,7 @@ var _ = Describe("Api", func() {
 	)
 	DescribeTable("should extract LocalTime",
 		func(raw string, expected string) {
-			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html")
+			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html", false)
 			Expect(structured.LocalTime).To(Equal(expected))
 		},
 		entry("<p><p><u><strong>Kovo 4 d. 21.50 val. duomenimis:</strong></u></p>", "2020-03-04T21:50:00+02:00"),
