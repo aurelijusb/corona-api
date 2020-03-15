@@ -17,6 +17,17 @@ var _ = Describe("Api", func() {
 		entry("koronavirusas-2020_03_05_14_45_02_00_00.html", "2020-03-05T14:45:02Z"),
 		entry("koronavirusas-2020_03_14_11_45_02_00_00.html", "2020-03-14T11:45:02Z"),
 	)
+	DescribeTable("should extract ConfirmedCases",
+		func(raw string, value string) {
+			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html")
+			expected, err := strconv.Atoi(value)
+			Expect(err).To(Not(HaveOccurred()))
+			Expect(structured.ConfirmedCases).To(Equal(expected))
+		},
+		entry("<li>Lietuvoje patvirtintų ligos atvejų: <strong>1 (patvirtinta 2020-02-28 4.00 val.)</strong></li>", "1"),
+		entry("<li>Lietuvoje patvirtintų ligos atvejų: 7 (1 patvirtintas 2020-02-28 4.00 val., 2 patvirtinti 2020-03-10 22 val., 3 patvirtinti 2020-03-13 13 val., 1 patvirtintas 2020-03-14 01.30 val.)</li>", "7"),
+		entry("<li><strong>Lietuvoje patvirtintų ligos atvejų:</strong> <strong>9 </strong>(1 patvirtintas 2020-02-28 4.00 val., 2 patvirtinti 2020-03-10 22 val., 3 patvirtinti 2020-03-13 13 val., 1 patvirtintas 2020-03-14 01.30 val., 1 patvirtintas 2020-03-14</li>", "9"),
+	)
 	DescribeTable("should extract LastDayChecked",
 		func(raw string, value string) {
 			structured := ExtractData(raw, "koronavirusas-2000_01_01_01_01_01_00_00.html")

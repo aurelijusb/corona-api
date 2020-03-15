@@ -46,7 +46,7 @@ func ExtractData(raw string, fileName string) CoronaReport {
 		LinkToRaw: fmt.Sprintf("/api/v1/raw/%s", fileName),
 	}
 	for _, line := range strings.Split(raw, "\n") {
-		if value, ok := extractNumber(line, `.*<li>Lietuvoje patvirtintų ligos atvejų:\D+(\d+).*\((.+)\).*</li>.*`, 1); ok {
+		if value, ok := extractNumber(line, `.*<li>.*Lietuvoje patvirtintų ligos atvejų:\D+(\d+)[^(]+\([^)]+.+`, 1); ok {
 			result.ConfirmedCases = value
 		}
 		if value, ok := extractNumber(line, `.*<li>Per vakar dieną ištirta: (\d+).*</li>.*`, 1); ok {
