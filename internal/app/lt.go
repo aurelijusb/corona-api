@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+var parsingCache map[string]CoronaReport = map[string]CoronaReport{}
+
 type (
 	// CoronaReport - structued representation of official website data
 	CoronaReport struct {
@@ -40,6 +42,10 @@ func DateToFileName(date string) string {
 
 // ExtractData - parse HTML into structured data
 func ExtractData(raw string, fileName string) CoronaReport {
+	if cached, exits := parsingCache[fileName]; exits {
+		return cached
+	}
+
 	crawlDate := FileNameToDate(fileName)
 	result := CoronaReport{
 		CrawlDate: crawlDate,
@@ -69,6 +75,8 @@ func ExtractData(raw string, fileName string) CoronaReport {
 			result.Time = parsedTime.UTC()
 		}
 	}
+
+	parsingCache[fileName] = result
 
 	return result
 }
