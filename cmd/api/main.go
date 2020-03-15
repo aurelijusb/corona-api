@@ -15,7 +15,9 @@ func init() {
 	mux.Get("/api/v1/raw/{file}", rawData)
 	mux.Get("/api/v1/raw", rawList)
 	mux.Get("/api/v1/dates", dates)
-	mux.Get("/api/v1/stats", stats)
+	mux.Get("/api/v1/historical", historical)
+	mux.Get("/api/v1/latest", latest)
+	mux.Get("/", usage)
 }
 
 func main() {
@@ -29,6 +31,24 @@ func main() {
 	if err != nil {
 		fmt.Printf("Error: %s", err.Error())
 	}
+}
+
+func usage(w http.ResponseWriter, req *http.Request) {
+	app.RespondJSON(map[string]interface{}{
+		"endpoints": []string{
+			"/ping",
+			"/api/v1/raw",
+			"/api/v1/raw/{fileName}",
+			"/api/v1/dates",
+			"/api/v1/historical",
+			"/api/v1/latest",
+		},
+		"source": map[string]string{
+			"data": "https://sam.lrv.lt/koronavirusas",
+			"code": "https://github.com/aurelijusb/corona-api",
+		},
+		"version": "0.1.0",
+	}, w)
 }
 
 func ping(w http.ResponseWriter, req *http.Request) {
@@ -67,7 +87,7 @@ func dates(w http.ResponseWriter, req *http.Request) {
 	app.RespondJSON(times, w)
 }
 
-func stats(w http.ResponseWriter, req *http.Request) {
+func historical(w http.ResponseWriter, req *http.Request) {
 	dataPath := app.GetEnv("DATA_PATH", "data/")
 	files, err := app.GetFiles(dataPath)
 	if err != nil {
@@ -86,4 +106,22 @@ func stats(w http.ResponseWriter, req *http.Request) {
 	}
 
 	app.RespondJSON(statistics, w)
+}
+
+func latest(w http.ResponseWriter, req *http.Request) {
+	dataPath := app.GetEnv("DATA_PATH", "data/")
+	files, err := app.GetFiles(dataPath)
+	if err != nil {
+		app.RespondWithError(err, w, req)
+		return
+	}
+	fileName := files[len(files)-1] // Latest
+	content, err := app.ReadFile(dataPath, fileName)
+	if err != nil {
+		app.RespondWithError(err, w, req)
+		return
+	}
+	statistic := app.ExtractData(string(content), fileName)
+
+	app.RespondJSON(statistic, w)
 }

@@ -12,7 +12,7 @@ Install [Go 1.14](https://golang.org/dl/)
 SERVER_HOST=127.0.0.1 SERVER_PORT=8080 go run cmd/api/main.go
 ```
 
-In the browser open [127.0.0.1:8080/ping](http://127.0.0.1:8080/ping)
+In the browser open [127.0.0.1:8080/ping](http://127.0.0.1:8080/)
 
 # Running tests
 
@@ -42,7 +42,7 @@ Running container locally
 docker run -p 127.0.0.1:8080:80 -v $PWD/data:/data:ro aurelijusb/corona-api:local
 ```
 
-In the browser open [127.0.0.1:8080/ping](http://127.0.0.1:8080/ping)
+In the browser open [127.0.0.1:8080/ping](http://127.0.0.1:8080/)
 
 # License
 
