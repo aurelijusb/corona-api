@@ -47,7 +47,7 @@ func usage(w http.ResponseWriter, req *http.Request) {
 			"data": "https://sam.lrv.lt/koronavirusas",
 			"code": "https://github.com/aurelijusb/corona-api",
 		},
-		"version": "0.1.0",
+		"version": "1.0.0",
 	}, w)
 }
 
